@@ -9,6 +9,9 @@
 
 目前实现了简单的发送消息功能，后序按照业务继续增加其他接口
 
+- Github: https://github.com/mouday/work-weixin-api
+- Pypi: https://pypi.org/project/work-weixin-api
+
 ## install
  
 ```bash
@@ -40,10 +43,10 @@ if __name__ == '__main__':
     print(client.user_simplelist(department_id=1))
     
     # 发送消息
-    print(client.message_send(
+    print(client.message_send_text(
         agentid=client.agent_id,
-        msgtype="text",
-        msgdata={'content': 'hi'}, touser="PengShiYu"
+        content='hi',
+        touser="PengShiYu"
     ))
 
 ```
