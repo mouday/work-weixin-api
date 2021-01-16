@@ -1,5 +1,10 @@
 # Work Weixin Api
 
+![PyPI](https://img.shields.io/pypi/v/work-weixin-api.svg)
+![PyPI - Downloads](https://img.shields.io/pypi/dm/work-weixin-api)
+![PyPI - Python Version](https://img.shields.io/pypi/pyversions/work-weixin-api)
+![PyPI - License](https://img.shields.io/pypi/l/work-weixin-api)
+
 企业微信接口封装库
 
 目前实现了简单的发送消息功能，后序按照业务继续增加其他接口
