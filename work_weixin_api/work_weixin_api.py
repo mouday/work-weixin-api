@@ -57,6 +57,10 @@ class WorkWeixinApi(object):
             }
         }
 
+    #####################################################
+    # 消息推送
+    #####################################################
+
     @api.post('/appchat/create')
     def appchat_create(self, userlist,
                        name=None,
@@ -181,5 +185,28 @@ class WorkWeixinApi(object):
                 'enable_id_trans': enable_id_trans,
                 'enable_duplicate_check': enable_duplicate_check,
                 'duplicate_check_interval': duplicate_check_interval
+            }
+        }
+
+    @api.post('/media/upload')
+    def media_upload(self, file, type, access_token=None):
+        """
+        上传临时素材
+        https://open.work.weixin.qq.com/api/doc/90000/90135/90253
+
+        access_token	是	调用接口凭证
+        type	        是	媒体文件类型，分别有图片（image）、语音（voice）、视频（video），普通文件（file）
+        file            是  file like object 大小限制  5B ~ 2MB 之间
+        :return:
+        """
+
+        return {
+            'query': {
+                'access_token': access_token,
+                'type': type
+            },
+
+            'files': {
+                'file': file
             }
         }
