@@ -12,9 +12,6 @@ class WorkWeixinClient(WorkWeixinApi):
     # 企业秘钥
     corpsecret = None
 
-    # 缓存引擎
-    cache_class = FileCache
-
     # 缓存时间：秒
     cache_expire = 7200
 
@@ -23,27 +20,27 @@ class WorkWeixinClient(WorkWeixinApi):
 
     def __init__(self):
         super().__init__()
+        # 缓存引擎
+        self.cache = FileCache()
 
-        self.cache = self.cache_class()
+    def before_request(self, options):
 
-    def _before_request(self, **kwargs):
+        if options['path'] != '/gettoken':
+            if options.get('params') is None:
+                options['params'] = {}
 
-        if kwargs['url'] != '/gettoken':
-            if kwargs['query'] is None:
-                kwargs['query'] = {}
+            if options['params'].get('access_token') is None:
+                options['params']['access_token'] = self.gettoken()
 
-            if kwargs['query'].get('access_token') is None:
-                kwargs['query']['access_token'] = self.gettoken()
+        return super().before_request(options)
 
-        return kwargs
-
-    def _get_cache_key(self):
+    def get_cache_key(self):
         return self.cache_key_prefix + '.' + self.corpid
 
     def gettoken(self, *args):
         """对token进行缓存"""
 
-        cache_key = self._get_cache_key()
+        cache_key = self.get_cache_key()
 
         token = self.cache.get(cache_key)
 

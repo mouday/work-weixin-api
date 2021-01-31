@@ -1,26 +1,19 @@
 # -*- coding: utf-8 -*-
 
-from clask import Clask
+from session_request import SessionRequest
 
 
-class WorkWeixinApi(object):
+class WorkWeixinApi(SessionRequest):
     """企业微信 API"""
 
     BASE_URL = 'https://qyapi.weixin.qq.com/cgi-bin'
 
-    api = Clask(base_url=BASE_URL)
+    def __init__(self, **kwargs):
+        super().__init__(self.BASE_URL, **kwargs)
 
-    def __init__(self):
-        self.api.before_request(self._before_request)
-        self.api.after_request(self._after_request)
-
-    def _before_request(self, **kwargs):
-        return kwargs
-
-    def _after_request(self, response):
+    def after_request(self, response):
         return response.json()
 
-    @api.get('/gettoken')
     def gettoken(self, corpid=None, corpsecret=None):
         """
         获取access_token
@@ -30,14 +23,16 @@ class WorkWeixinApi(object):
         corpsecret	是	应用的凭证密钥，获取方式参考：术语说明-secret
 
         """
-        return {
-            'query': {
+        options = {
+            'path': '/gettoken',
+            'params': {
                 'corpid': corpid,
                 'corpsecret': corpsecret
             }
         }
 
-    @api.get('/user/simplelist')
+        return self.get(**options)
+
     def user_simplelist(self, department_id,
                         fetch_child=None,
                         access_token=None):
@@ -49,19 +44,21 @@ class WorkWeixinApi(object):
         access_token	是	调用接口凭证
 
         """
-        return {
-            'query': {
+        options = {
+            'path': '/user/simplelist',
+            'params': {
                 'access_token': access_token,
                 'department_id': department_id,
                 'fetch_child': fetch_child
             }
         }
 
+        return self.get(**options)
+
     #####################################################
     # 消息推送
     #####################################################
 
-    @api.post('/appchat/create')
     def appchat_create(self, userlist,
                        name=None,
                        owner=None,
@@ -78,8 +75,9 @@ class WorkWeixinApi(object):
         chatid	        否	群聊的唯一标志，不能与已有的群重复；字符串类型，最长32个字符。只允许字符0-9及字母a-zA-Z。如果不填，系统会随机生成群id
 
         """
-        return {
-            'query': {
+        options = {
+            'path': '/appchat/create',
+            'params': {
                 'access_token': access_token
             },
             'json': {
@@ -90,7 +88,8 @@ class WorkWeixinApi(object):
             }
         }
 
-    @api.post('/appchat/send')
+        return self.post(**options)
+
     def appchat_send(self, chatid, msgtype, msgdata,
                      safe=None,
                      access_token=None):
@@ -114,8 +113,9 @@ class WorkWeixinApi(object):
         safe	        否	表示是否是保密消息，0表示否，1表示是，默认0
         access_token	是	调用接口凭证
         """
-        return {
-            'query': {
+        options = {
+            'path': '/appchat/send',
+            'params': {
                 'access_token': access_token
             },
             'json': {
@@ -126,7 +126,8 @@ class WorkWeixinApi(object):
             }
         }
 
-    @api.post('/message/send')
+        return self.post(**options)
+
     def message_send(self, agentid, msgtype, msgdata,
                      touser=None,
                      toparty=None,
@@ -170,8 +171,9 @@ class WorkWeixinApi(object):
         access_token	是	调用接口凭证
         :return: 
         """
-        return {
-            'query': {
+        options = {
+            'path': '/message/send',
+            'params': {
                 'access_token': access_token
             },
             'json': {
@@ -188,7 +190,8 @@ class WorkWeixinApi(object):
             }
         }
 
-    @api.post('/media/upload')
+        return self.post(**options)
+
     def media_upload(self, file, type, access_token=None):
         """
         上传临时素材
@@ -200,13 +203,14 @@ class WorkWeixinApi(object):
         :return:
         """
 
-        return {
-            'query': {
+        options = {
+            'path': '/media/upload',
+            'params': {
                 'access_token': access_token,
                 'type': type
             },
-
             'files': {
                 'file': file
             }
         }
+        return self.post(**options)

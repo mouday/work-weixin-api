@@ -51,6 +51,8 @@ if __name__ == '__main__':
 
 ```
 
+WorkWeixinClient 缓存默认使用了mo_cache的文件缓存FileCache，可以替换redis,或内存缓存
+
 ## 说明
 
 核心类继承关系：
