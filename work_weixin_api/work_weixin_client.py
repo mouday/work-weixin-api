@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+from __future__ import print_function, unicode_literals
+
 from mo_cache import FileCache
 
 from .work_weixin_api import WorkWeixinApi
